@@ -1,0 +1,38 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/organizer/venues"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Add Venue</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <form [formGroup]="venueForm" (ngSubmit)="onSubmit()">
+    <ion-item>
+      <ion-label position="floating">Venue Name</ion-label>
+      <ion-input formControlName="name"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="floating">Address</ion-label>
+      <ion-input formControlName="address"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="floating">City</ion-label>
+      <ion-input formControlName="city"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="floating">Map URL (optional)</ion-label>
+      <ion-input formControlName="map_url" type="url"></ion-input>
+    </ion-item>
+
+    <ion-button expand="block" type="submit" class="ion-margin-top" [disabled]="submitting">
+      {{ submitting ? 'Saving...' : 'Add Venue' }}
+    </ion-button>
+
+    <p *ngIf="errorMessage" style="color: red;">{{ errorMessage }}</p>
+  </form>
+</ion-content>
