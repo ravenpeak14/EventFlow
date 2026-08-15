@@ -1,0 +1,48 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/orders"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Order Detail</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <div *ngIf="loading" class="ion-text-center ion-padding">
+    <ion-spinner></ion-spinner>
+  </div>
+
+  <div *ngIf="!loading && order">
+    <h1>{{ order.order_number }}</h1>
+    <ion-badge [color]="statusColor(order.status)">{{ order.status }}</ion-badge>
+
+    <ion-list class="ion-margin-top">
+      <ion-item *ngFor="let item of order.items">
+        <ion-label>
+          <h3>{{ item.ticket_type.name }} × {{ item.quantity }}</h3>
+          <p>Rp {{ item.price_at_purchase | number }} each</p>
+        </ion-label>
+        <ion-label slot="end" class="ion-text-end">
+          Rp {{ item.subtotal | number }}
+        </ion-label>
+      </ion-item>
+    </ion-list>
+
+    <h2 class="ion-text-end">Total: Rp {{ order.total_amount | number }}</h2>
+
+    <ion-button
+      *ngIf="order.status === 'pending'"
+      expand="block"
+      [disabled]="submitting"
+      (click)="payNow()"
+    >
+      {{ submitting ? 'Processing...' : 'Pay Now (Simulation)' }}
+    </ion-button>
+
+    <p *ngIf="order.status === 'paid'" class="ion-text-center" style="color: green;">
+      Payment confirmed.
+    </p>
+
+    <p *ngIf="errorMessage" style="color: red;">{{ errorMessage }}</p>
+  </div>
+</ion-content>

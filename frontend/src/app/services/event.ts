@@ -17,6 +17,15 @@ export interface EventItem {
   status: string;
   category?: { id: number; name: string; slug: string };
   venue?: { id: number; name: string; city: string; address?: string } | null;
+  organizer?: { id: number; name: string };
+  ticket_types?: {
+    id: number;
+    name: string;
+    description: string | null;
+    price: number;
+    available_quota: number;
+    is_on_sale: boolean;
+  }[];
 }
 
 export interface CreateEventPayload {
@@ -108,5 +117,21 @@ export class EventService {
       `${this.baseUrl}/organizer/events/${id}`,
       payload
     );
+  }
+  getPendingApprovals(): Observable<PaginatedResponse<EventItem>> {
+    return this.http.get<PaginatedResponse<EventItem>>(
+      `${this.baseUrl}/admin/events/pending`
+    );
+  }
+
+  approveEvent(id: number): Observable<{ data: EventItem }> {
+    return this.http.post<{ data: EventItem }>(
+      `${this.baseUrl}/admin/events/${id}/approve`,
+      {}
+    );
+  }
+
+  getPublicDetail(id: number): Observable<{ data: EventItem }> {
+    return this.http.get<{ data: EventItem }>(`${this.baseUrl}/events/${id}`);
   }
 }

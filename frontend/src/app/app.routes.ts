@@ -56,4 +56,71 @@ export const routes: Routes = [
       ),
     canActivate: [authGuard],
   },
+  {
+    path: 'organizer/events/:id/edit',
+    loadComponent: () =>
+      import('./pages/organizer/event-edit/event-edit.component').then(
+        (m) => m.EventEditComponent
+      ),
+    canActivate: [authGuard],
+  },
+
+  {
+    path: 'admin/pending-approvals',
+    loadComponent: () =>
+      import('./pages/admin/pending-approvals/pending-approvals.component').then(
+        (m) => m.PendingApprovalsComponent
+      ),
+    canActivate: [authGuard],
+  },
+  {
+    path: 'organizer/events/:id/ticket-types/create',
+    loadComponent: () =>
+      import('./pages/organizer/ticket-type-create/ticket-type-create.component').then(
+        (m) => m.TicketTypeCreateComponent
+      ),
+    canActivate: [authGuard],
+  },
+
+  {
+    path: 'events/:id',
+    loadComponent: () =>
+      import('./pages/event-public-detail/event-public-detail.component').then(
+        (m) => m.EventPublicDetailComponent
+      ),
+  },
+
+  {
+    path: 'orders',
+    loadComponent: () =>
+      import('./pages/my-orders/my-orders.component').then(
+        (m) => m.MyOrdersComponent
+      ),
+    canActivate: [authGuard],
+  },
+  {
+    path: 'orders/:id',
+    loadComponent: () =>
+      import('./pages/order-detail/order-detail.component').then(
+        (m) => m.OrderDetailComponent
+      ),
+    canActivate: [authGuard],
+  },
+  {
+    path: 'tickets',
+    loadComponent: () =>
+      import('./pages/my-tickets/my-tickets.component').then(
+        (m) => m.MyTicketsComponent
+      ),
+    canActivate: [authGuard],
+  },
+
+  {
+    path: 'staff/check-in',
+    loadComponent: () =>
+      import('./pages/staff/check-in/check-in.component').then(
+        (m) => m.CheckInComponent
+      ),
+    canActivate: [authGuard],
+  },
 ];

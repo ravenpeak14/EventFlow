@@ -61,4 +61,8 @@ class Event extends Model
     {
         return $this->hasMany(EventSpeaker::class);
     }
+    public function ticketTypes()
+    {
+        return $this->hasMany(TicketType::class);
+    }
 }

@@ -38,7 +38,7 @@ class EventController extends Controller
             abort(404);
         }
 
-        $event->load(['category', 'venue', 'organizer', 'schedules', 'speakers']);
+        $event->load(['category', 'venue', 'organizer', 'schedules', 'speakers', 'ticketTypes']);
 
         return new EventResource($event);
     }
@@ -147,6 +147,7 @@ class EventController extends Controller
         }
 
         $event->update(['status' => 'approved']);
+        $event->load(['category', 'venue', 'organizer']);
 
         return new EventResource($event);
     }
@@ -166,6 +167,7 @@ class EventController extends Controller
         }
 
         $event->update(['status' => 'published']);
+        $event->load(['category', 'venue']);
 
         return new EventResource($event);
     }
@@ -183,5 +185,18 @@ class EventController extends Controller
         $event->update(['status' => 'cancelled']);
 
         return new EventResource($event);
+    }
+
+    /**
+     * Admin: list events waiting for approval.
+     */
+    public function pendingApprovals()
+    {
+        $events = Event::where('status', 'submitted')
+            ->with(['category', 'venue', 'organizer'])
+            ->orderBy('updated_at')
+            ->paginate(10);
+
+        return EventResource::collection($events);
     }
 }

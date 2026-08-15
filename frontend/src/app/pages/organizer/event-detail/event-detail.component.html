@@ -15,7 +15,7 @@
   <div *ngIf="!loading && event">
     <h1>{{ event.name }}</h1>
     <ion-badge [color]="statusColor(event.status)">{{ event.status }}</ion-badge>
-    
+
     <ion-button *ngIf="event.status !== 'published' && event.status !== 'cancelled' && event.status !== 'completed'"
       fill="outline" expand="block" class="ion-margin-top" [routerLink]="['/organizer/events', event.id, 'edit']">
       Edit Event
@@ -64,6 +64,34 @@
         </ion-label>
       </ion-item>
     </ion-list>
+
+    <div class="ion-margin-top">
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <h2>Ticket Types</h2>
+        <ion-button size="small" fill="outline"
+          [routerLink]="['/organizer/events', event.id, 'ticket-types', 'create']">
+          <ion-icon name="add-outline" slot="start"></ion-icon>
+          Add
+        </ion-button>
+      </div>
+
+      <ion-list *ngIf="ticketTypes.length > 0">
+        <ion-item *ngFor="let ticket of ticketTypes">
+          <ion-label>
+            <h3>{{ ticket.name }}</h3>
+            <p>Rp {{ ticket.price | number }} · {{ ticket.available_quota }} / {{ ticket.quota }} available</p>
+          </ion-label>
+          <ion-button slot="end" fill="clear" color="danger" [disabled]="ticket.sold_count > 0"
+            (click)="deleteTicketType(ticket)">
+            <ion-icon name="trash-outline"></ion-icon>
+          </ion-button>
+        </ion-item>
+      </ion-list>
+
+      <p *ngIf="ticketTypes.length === 0" class="ion-text-center">
+        No ticket types yet.
+      </p>
+    </div>
 
     <p *ngIf="errorMessage" style="color: red;">{{ errorMessage }}</p>
 

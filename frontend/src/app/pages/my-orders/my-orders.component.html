@@ -1,0 +1,25 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>My Orders</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <div *ngIf="loading" class="ion-text-center ion-padding">
+    <ion-spinner></ion-spinner>
+  </div>
+
+  <ion-list *ngIf="!loading && orders.length > 0">
+    <ion-item *ngFor="let order of orders" [routerLink]="['/orders', order.id]" button>
+      <ion-label>
+        <h2>{{ order.order_number }}</h2>
+        <p>Rp {{ order.total_amount | number }} · {{ order.items.length }} item(s)</p>
+      </ion-label>
+      <ion-badge [color]="statusColor(order.status)">{{ order.status }}</ion-badge>
+    </ion-item>
+  </ion-list>
+
+  <p *ngIf="!loading && orders.length === 0" class="ion-text-center">
+    You haven't made any orders yet.
+  </p>
+</ion-content>

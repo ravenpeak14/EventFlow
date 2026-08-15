@@ -76,7 +76,7 @@ export class EventEditComponent implements OnInit {
     private eventService: EventService,
     private categoryService: EventCategoryService,
     private venueService: VenueService
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.eventId = Number(this.route.snapshot.paramMap.get('id'));
@@ -99,8 +99,8 @@ export class EventEditComponent implements OnInit {
           description: event.description,
           start_date: event.start_date,
           end_date: event.end_date,
-          start_time: event.start_time,
-          end_time: event.end_time,
+          start_time: event.start_time?.substring(0, 5),
+          end_time: event.end_time?.substring(0, 5),
           capacity: event.capacity,
         } as any);
         this.loading = false;

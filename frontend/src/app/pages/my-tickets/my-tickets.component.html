@@ -1,0 +1,36 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>My Tickets</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <div *ngIf="loading" class="ion-text-center ion-padding">
+    <ion-spinner></ion-spinner>
+  </div>
+
+  <ion-card *ngFor="let ticket of tickets">
+    <ion-card-header>
+      <ion-card-subtitle>{{ ticket.ticket_type.name }}</ion-card-subtitle>
+      <ion-card-title>{{ ticket.event.name }}</ion-card-title>
+    </ion-card-header>
+
+    <ion-card-content>
+      <p>{{ ticket.event.start_date }} · {{ ticket.event.start_time }}</p>
+
+      <div class="ion-text-center ion-margin-top" *ngIf="qrImages[ticket.id]">
+        <img [src]="qrImages[ticket.id]" alt="QR Code" width="180" height="180" />
+      </div>
+
+      <p class="ion-text-center" style="font-family: monospace;">
+        {{ ticket.ticket_code }}
+      </p>
+
+      <ion-badge [color]="statusColor(ticket.status)">{{ ticket.status }}</ion-badge>
+    </ion-card-content>
+  </ion-card>
+
+  <p *ngIf="!loading && tickets.length === 0" class="ion-text-center">
+    You don't have any tickets yet.
+  </p>
+</ion-content>

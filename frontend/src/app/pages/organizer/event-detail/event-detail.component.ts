@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import {
   IonHeader,
   IonToolbar,
@@ -10,13 +10,16 @@ import {
   IonContent,
   IonBadge,
   IonButton,
+  IonIcon,
   IonSpinner,
   IonList,
   IonItem,
   IonLabel,
 } from '@ionic/angular/standalone';
+import { addIcons } from 'ionicons';
+import { addOutline, trashOutline } from 'ionicons/icons';
 import { EventService, EventItem } from '../../../services/event';
-import { RouterLink } from '@angular/router';
+import { TicketTypeService, TicketTypeItem } from '../../../services/ticket-type';
 
 @Component({
   selector: 'app-event-detail',
@@ -25,6 +28,7 @@ import { RouterLink } from '@angular/router';
   standalone: true,
   imports: [
     CommonModule,
+    RouterLink,
     IonHeader,
     IonToolbar,
     IonTitle,
@@ -33,6 +37,7 @@ import { RouterLink } from '@angular/router';
     IonContent,
     IonBadge,
     IonButton,
+    IonIcon,
     IonSpinner,
     IonList,
     IonItem,
@@ -41,6 +46,7 @@ import { RouterLink } from '@angular/router';
 })
 export class EventDetailComponent implements OnInit {
   event: EventItem | null = null;
+  ticketTypes: TicketTypeItem[] = [];
   loading = true;
   actionLoading = false;
   errorMessage = '';
@@ -48,12 +54,16 @@ export class EventDetailComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private eventService: EventService
-  ) {}
+    private eventService: EventService,
+    private ticketTypeService: TicketTypeService
+  ) {
+    addIcons({ addOutline, trashOutline });
+  }
 
   ngOnInit() {
     const id = Number(this.route.snapshot.paramMap.get('id'));
     this.loadEvent(id);
+    this.loadTicketTypes(id);
   }
 
   loadEvent(id: number) {
@@ -67,6 +77,30 @@ export class EventDetailComponent implements OnInit {
         console.error('Failed to load event:', err);
         this.errorMessage = 'Failed to load event.';
         this.loading = false;
+      },
+    });
+  }
+
+  loadTicketTypes(eventId: number) {
+    this.ticketTypeService.getByEvent(eventId).subscribe({
+      next: (response) => {
+        this.ticketTypes = response.data;
+      },
+      error: (err) => {
+        console.error('Failed to load ticket types:', err);
+      },
+    });
+  }
+
+  deleteTicketType(ticketType: TicketTypeItem) {
+    if (!this.event) return;
+
+    this.ticketTypeService.delete(this.event.id, ticketType.id).subscribe({
+      next: () => {
+        this.ticketTypes = this.ticketTypes.filter((t) => t.id !== ticketType.id);
+      },
+      error: (err) => {
+        this.errorMessage = err.error?.message || 'Failed to delete ticket type.';
       },
     });
   }
