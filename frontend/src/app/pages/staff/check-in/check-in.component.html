@@ -4,42 +4,29 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="ion-padding">
-  <ion-item>
-    <ion-label position="floating">Event</ion-label>
-    <ion-select [(ngModel)]="selectedEventId" interface="popover">
-      <ion-select-option *ngFor="let event of events" [value]="event.id">
-        {{ event.name }}
-      </ion-select-option>
-    </ion-select>
-  </ion-item>
+<ion-content class="ion-padding has-tab-bar">
+  <ion-select label="Event" labelPlacement="stacked" [(ngModel)]="selectedEventId" interface="popover">
+    <ion-select-option *ngFor="let event of events" [value]="event.id">{{ event.name }}</ion-select-option>
+  </ion-select>
 
-  <ion-item>
-    <ion-label position="floating">Ticket Code</ion-label>
-    <ion-input
-      [(ngModel)]="ticketCode"
-      placeholder="TIX-XXXXXXXXXX"
-      (keyup.enter)="submit()"
-    ></ion-input>
-  </ion-item>
+  <div class="field-box">
+    <ion-input label="Ticket Code" labelPlacement="stacked" [(ngModel)]="ticketCode" placeholder="TIX-XXXXXXXXXX"
+      (keyup.enter)="submit()"></ion-input>
+  </div>
 
-  <ion-button
-    expand="block"
-    class="ion-margin-top"
-    [disabled]="!selectedEventId || !ticketCode.trim() || submitting"
-    (click)="submit()"
-  >
+  <ion-button expand="block" [disabled]="!selectedEventId || !ticketCode.trim() || submitting" (click)="submit()">
     {{ submitting ? 'Checking...' : 'Check In' }}
   </ion-button>
 
-  <h2 class="ion-margin-top">Recent Scans</h2>
-  <ion-list>
-    <ion-item *ngFor="let entry of log">
-      <ion-label [color]="entry.success ? 'success' : 'danger'">
-        <h3>{{ entry.ticketCode }}</h3>
-        <p *ngIf="entry.success">{{ entry.attendeeName }} · {{ entry.ticketType }}</p>
-        <p>{{ entry.message }}</p>
-      </ion-label>
-    </ion-item>
-  </ion-list>
+  <h2 class="section-title">Recent Scans</h2>
+
+  <div class="scan-entry" *ngFor="let entry of log" [class.success]="entry.success" [class.fail]="!entry.success">
+    <ion-icon [name]="entry.success ? 'checkmark-circle' : 'close-circle'"></ion-icon>
+    <div>
+      <h3>{{ entry.ticketCode }}</h3>
+      <p *ngIf="entry.success">{{ entry.attendeeName }} · {{ entry.ticketType }}</p>
+      <p>{{ entry.message }}</p>
+    </div>
+  </div>
+  <app-tab-bar [tabs]="tabs"></app-tab-bar>
 </ion-content>

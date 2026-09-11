@@ -1,120 +1,72 @@
 <ion-header>
   <ion-toolbar>
-    <ion-buttons slot="start">
-      <ion-back-button defaultHref="/organizer/events"></ion-back-button>
-    </ion-buttons>
+    <ion-buttons slot="start"><ion-back-button defaultHref="/organizer/events"></ion-back-button></ion-buttons>
     <ion-title>Event Detail</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content class="ion-padding">
-  <div *ngIf="loading" class="ion-text-center ion-padding">
-    <ion-spinner></ion-spinner>
-  </div>
+  <div *ngIf="loading" class="ion-text-center ion-padding"><ion-spinner></ion-spinner></div>
 
   <div *ngIf="!loading && event">
-    <h1>{{ event.name }}</h1>
-    <ion-badge [color]="statusColor(event.status)">{{ event.status }}</ion-badge>
-
-    <ion-button *ngIf="event.status !== 'published' && event.status !== 'cancelled' && event.status !== 'completed'"
-      fill="outline" expand="block" class="ion-margin-top" [routerLink]="['/organizer/events', event.id, 'edit']">
-      Edit Event
-    </ion-button>
-
-    <ion-list>
-      <ion-item>
-        <ion-label>
-          <p>Category</p>
-          <h3>{{ event.category?.name }}</h3>
-        </ion-label>
-      </ion-item>
-
-      <ion-item>
-        <ion-label>
-          <p>Date</p>
-          <h3>{{ event.start_date }} - {{ event.end_date }}</h3>
-        </ion-label>
-      </ion-item>
-
-      <ion-item>
-        <ion-label>
-          <p>Time</p>
-          <h3>{{ event.start_time }} - {{ event.end_time }}</h3>
-        </ion-label>
-      </ion-item>
-
-      <ion-item>
-        <ion-label>
-          <p>Venue</p>
-          <h3>{{ event.venue ? event.venue.name + ', ' + event.venue.city : 'Not set yet' }}</h3>
-        </ion-label>
-      </ion-item>
-
-      <ion-item>
-        <ion-label>
-          <p>Capacity</p>
-          <h3>{{ event.capacity ?? 'Unlimited' }}</h3>
-        </ion-label>
-      </ion-item>
-
-      <ion-item>
-        <ion-label class="ion-text-wrap">
-          <p>Description</p>
-          <p>{{ event.description }}</p>
-        </ion-label>
-      </ion-item>
-    </ion-list>
-
-    <div class="ion-margin-top">
-      <div style="display: flex; justify-content: space-between; align-items: center;">
-        <h2>Ticket Types</h2>
-        <ion-button size="small" fill="outline"
-          [routerLink]="['/organizer/events', event.id, 'ticket-types', 'create']">
-          <ion-icon name="add-outline" slot="start"></ion-icon>
-          Add
-        </ion-button>
-      </div>
-
-      <ion-list *ngIf="ticketTypes.length > 0">
-        <ion-item *ngFor="let ticket of ticketTypes">
-          <ion-label>
-            <h3>{{ ticket.name }}</h3>
-            <p>Rp {{ ticket.price | number }} · {{ ticket.available_quota }} / {{ ticket.quota }} available</p>
-          </ion-label>
-          <ion-button slot="end" fill="clear" color="danger" [disabled]="ticket.sold_count > 0"
-            (click)="deleteTicketType(ticket)">
-            <ion-icon name="trash-outline"></ion-icon>
-          </ion-button>
-        </ion-item>
-      </ion-list>
-
-      <p *ngIf="ticketTypes.length === 0" class="ion-text-center">
-        No ticket types yet.
-      </p>
+    <div class="status-row">
+      <ion-badge [color]="statusColor(event.status)">{{ event.status }}</ion-badge>
+      <ion-button *ngIf="event.status !== 'published' && event.status !== 'cancelled' && event.status !== 'completed'"
+        fill="clear" size="small" [routerLink]="['/organizer/events', event.id, 'edit']">
+        Edit
+      </ion-button>
     </div>
 
-    <p *ngIf="errorMessage" style="color: red;">{{ errorMessage }}</p>
+    <h1>{{ event.name }}</h1>
 
-    <!-- Lifecycle actions -->
-    <ion-button *ngIf="event.status === 'draft'" expand="block" [disabled]="actionLoading" (click)="onSubmit()">
-      Submit for Approval
-    </ion-button>
+    <div class="info-card">
+      <div class="info-row"><ion-icon name="pricetag-outline"></ion-icon><span>{{ event.category?.name }}</span></div>
+      <div class="info-row"><ion-icon name="calendar-outline"></ion-icon><span>{{ formatDate(event.start_date) }} - {{
+          formatDate(event.end_date) }}</span></div>
+      <div class="info-row"><ion-icon name="time-outline"></ion-icon><span>{{ event.start_time }} - {{ event.end_time
+          }}</span></div>
+      <div class="info-row"><ion-icon name="location-outline"></ion-icon><span>{{ event.venue ? event.venue.name + ', '
+          + event.venue.city : 'Venue not set' }}</span></div>
+      <div class="info-row"><ion-icon name="people-outline"></ion-icon><span>Capacity: {{ event.capacity ?? 'Unlimited'
+          }}</span></div>
+    </div>
 
-    <p *ngIf="event.status === 'submitted'" class="ion-text-center">
-      Waiting for admin approval.
-    </p>
+    <p class="description">{{ event.description }}</p>
 
-    <ion-button *ngIf="event.status === 'approved'" expand="block" color="success"
-      [disabled]="actionLoading || !event.venue" (click)="onPublish()">
-      Publish Event
-    </ion-button>
-    <p *ngIf="event.status === 'approved' && !event.venue" class="ion-text-center" style="color: orange;">
-      Set a venue before publishing (edit feature coming soon).
-    </p>
+    <div class="section-header">
+      <h2>Ticket Types</h2>
+      <ion-button size="small" fill="outline" [routerLink]="['/organizer/events', event.id, 'ticket-types', 'create']">
+        <ion-icon name="add-outline" slot="start"></ion-icon>Add
+      </ion-button>
+    </div>
 
-    <ion-button *ngIf="event.status === 'published'" expand="block" color="danger" [disabled]="actionLoading"
-      (click)="onCancel()">
-      Cancel Event
-    </ion-button>
+    <div class="ticket-row" *ngFor="let ticket of ticketTypes">
+      <div>
+        <h3>{{ ticket.name }}</h3>
+        <p>Rp {{ ticket.price | number }} · {{ ticket.available_quota }}/{{ ticket.quota }} available</p>
+      </div>
+      <ion-button fill="clear" color="danger" [disabled]="ticket.sold_count > 0" (click)="deleteTicketType(ticket)">
+        <ion-icon name="trash-outline"></ion-icon>
+      </ion-button>
+    </div>
+    <p *ngIf="ticketTypes.length === 0" class="empty-note">No ticket types yet.</p>
+
+    <p *ngIf="errorMessage" class="error-text">{{ errorMessage }}</p>
+
+    <div class="action-zone">
+      <ion-button *ngIf="event.status === 'draft'" expand="block" [disabled]="actionLoading" (click)="onSubmit()">
+        Submit for Approval
+      </ion-button>
+      <p *ngIf="event.status === 'submitted'" class="waiting-note">Waiting for admin approval.</p>
+      <ion-button *ngIf="event.status === 'approved'" expand="block" color="success"
+        [disabled]="actionLoading || !event.venue" (click)="onPublish()">
+        Publish Event
+      </ion-button>
+      <p *ngIf="event.status === 'approved' && !event.venue" class="warn-note">Set a venue before publishing.</p>
+      <ion-button *ngIf="event.status === 'published'" expand="block" color="danger" fill="outline"
+        [disabled]="actionLoading" (click)="onCancel()">
+        Cancel Event
+      </ion-button>
+    </div>
   </div>
 </ion-content>

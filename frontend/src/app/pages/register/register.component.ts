@@ -2,21 +2,15 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
-import {
-  IonContent,
-  IonInput,
-  IonButton,
-  IonIcon,
-} from '@ionic/angular/standalone';
+import { IonContent, IonInput, IonButton, IonIcon } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import { eyeOutline, eyeOffOutline } from 'ionicons/icons';
 import { AuthService } from '../../services/auth';
-import { getRouteForRole } from '../../shared/role-routes';
 
 @Component({
-  selector: 'app-login',
-  templateUrl: './login.component.html',
-  styleUrls: ['./login.component.scss'],
+  selector: 'app-register',
+  templateUrl: './register.component.html',
+  styleUrls: ['./register.component.scss'],
   standalone: true,
   imports: [
     CommonModule,
@@ -28,10 +22,12 @@ import { getRouteForRole } from '../../shared/role-routes';
     IonIcon,
   ],
 })
-export class LoginComponent {
-  loginForm = this.fb.group({
+export class RegisterComponent {
+  registerForm = this.fb.group({
+    name: ['', Validators.required],
     email: ['', [Validators.required, Validators.email]],
-    password: ['', [Validators.required]],
+    password: ['', [Validators.required, Validators.minLength(8)]],
+    password_confirmation: ['', Validators.required],
   });
 
   showPassword = false;
@@ -47,8 +43,13 @@ export class LoginComponent {
   }
 
   onSubmit() {
-    if (this.loginForm.invalid) {
-      this.loginForm.markAllAsTouched();
+    if (this.registerForm.invalid) {
+      this.registerForm.markAllAsTouched();
+      return;
+    }
+
+    if (this.registerForm.value.password !== this.registerForm.value.password_confirmation) {
+      this.errorMessage = 'Passwords do not match.';
       return;
     }
 
@@ -56,20 +57,21 @@ export class LoginComponent {
     this.errorMessage = '';
 
     this.authService
-      .login(this.loginForm.value as { email: string; password: string })
+      .register(this.registerForm.value as {
+        name: string;
+        email: string;
+        password: string;
+        password_confirmation: string;
+      })
       .subscribe({
         next: async (response) => {
           await this.authService.saveSession(response.token, response.role);
-          this.redirectByRole(response.role);
+          this.router.navigateByUrl('/home');
         },
         error: (err) => {
           this.submitting = false;
-          this.errorMessage = err.error?.message || 'Login failed. Please try again.';
+          this.errorMessage = err.error?.message || 'Registration failed.';
         },
       });
-  }
-
-  private redirectByRole(role: string) {
-    this.router.navigateByUrl(getRouteForRole(role));
   }
 }

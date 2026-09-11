@@ -30,6 +30,7 @@ export interface EventItem {
 
 export interface CreateEventPayload {
   event_category_id: number;
+  venue_id?: number;
   name: string;
   description: string;
   start_date: string;

@@ -1,2 +1,82 @@
-// For information on how to create your own theme, please refer to:
-// https://ionicframework.com/docs/theming/
+/* Google Fonts imported via index.html */
+
+:root {
+  /* ---- Brand Colors ---- */
+  --ion-color-primary: #ff5a3c;
+  --ion-color-primary-rgb: 255, 90, 60;
+  --ion-color-primary-contrast: #ffffff;
+  --ion-color-primary-contrast-rgb: 255, 255, 255;
+  --ion-color-primary-shade: #e04f35;
+  --ion-color-primary-tint: #ff6b50;
+
+  --ion-color-secondary: #1a1a2e;
+  --ion-color-secondary-rgb: 26, 26, 46;
+  --ion-color-secondary-contrast: #ffffff;
+  --ion-color-secondary-contrast-rgb: 255, 255, 255;
+  --ion-color-secondary-shade: #171728;
+  --ion-color-secondary-tint: #313145;
+
+  --ion-color-tertiary: #2d7d9a;
+  --ion-color-tertiary-rgb: 45, 125, 154;
+  --ion-color-tertiary-contrast: #ffffff;
+  --ion-color-tertiary-contrast-rgb: 255, 255, 255;
+  --ion-color-tertiary-shade: #286e88;
+  --ion-color-tertiary-tint: #428aa4;
+
+  --ion-color-success: #1e9e6b;
+  --ion-color-success-rgb: 30, 158, 107;
+  --ion-color-success-contrast: #ffffff;
+  --ion-color-success-contrast-rgb: 255, 255, 255;
+  --ion-color-success-shade: #1a8b5e;
+  --ion-color-success-tint: #34a87a;
+
+  --ion-color-warning: #f5a623;
+  --ion-color-warning-rgb: 245, 166, 35;
+  --ion-color-warning-contrast: #1a1a2e;
+  --ion-color-warning-contrast-rgb: 26, 26, 46;
+  --ion-color-warning-shade: #d8921f;
+  --ion-color-warning-tint: #f6af39;
+
+  --ion-color-danger: #e5484d;
+  --ion-color-danger-rgb: 229, 72, 77;
+  --ion-color-danger-contrast: #ffffff;
+  --ion-color-danger-contrast-rgb: 255, 255, 255;
+  --ion-color-danger-shade: #ca3f44;
+  --ion-color-danger-tint: #e85a5f;
+
+  --ion-color-medium: #8a8a94;
+  --ion-color-medium-rgb: 138, 138, 148;
+  --ion-color-medium-contrast: #ffffff;
+  --ion-color-medium-contrast-rgb: 255, 255, 255;
+  --ion-color-medium-shade: #797982;
+  --ion-color-medium-tint: #96969f;
+
+  --ion-color-light: #f7f7f9;
+  --ion-color-light-rgb: 247, 247, 249;
+  --ion-color-light-contrast: #1a1a2e;
+  --ion-color-light-contrast-rgb: 26, 26, 46;
+  --ion-color-light-shade: #d9d9db;
+  --ion-color-light-tint: #f8f8fa;
+
+  --ion-color-dark: #1a1a2e;
+  --ion-color-dark-rgb: 26, 26, 46;
+  --ion-color-dark-contrast: #ffffff;
+  --ion-color-dark-contrast-rgb: 255, 255, 255;
+  --ion-color-dark-shade: #171728;
+  --ion-color-dark-tint: #313145;
+
+  /* ---- Force light theme (ignore OS dark mode) ---- */
+  --ion-background-color: #ffffff;
+  --ion-background-color-rgb: 255, 255, 255;
+  --ion-text-color: #1a1a2e;
+  --ion-text-color-rgb: 26, 26, 46;
+  --ion-toolbar-background: #ffffff;
+  --ion-item-background: #ffffff;
+
+  /* ---- EventFlow custom tokens ---- */
+  --ef-font-heading: 'Poppins', sans-serif;
+  --ef-font-body: 'Inter', sans-serif;
+  --ef-radius: 14px;
+  --ef-radius-sm: 8px;
+  --ef-shadow: 0 2px 12px rgba(26, 26, 46, 0.08);
+}

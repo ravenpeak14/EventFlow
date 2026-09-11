@@ -1,33 +1,26 @@
 <ion-header>
   <ion-toolbar>
-    <ion-buttons slot="start">
-      <ion-back-button defaultHref="/organizer/events"></ion-back-button>
-    </ion-buttons>
+    <ion-buttons slot="start"><ion-back-button defaultHref="/organizer/events"></ion-back-button></ion-buttons>
     <ion-title>Venues</ion-title>
     <ion-buttons slot="end">
-      <ion-button routerLink="/organizer/venues/create">
-        <ion-icon name="add-outline"></ion-icon>
-      </ion-button>
+      <ion-button routerLink="/organizer/venues/create"><ion-icon name="add-outline"></ion-icon></ion-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="ion-padding">
-  <div *ngIf="loading" class="ion-text-center ion-padding">
-    <ion-spinner></ion-spinner>
+<ion-content class="ion-padding has-tab-bar">
+  <div *ngIf="loading" class="ion-text-center ion-padding"><ion-spinner></ion-spinner></div>
+
+  <div class="venue-row" *ngFor="let venue of venues">
+    <div class="venue-icon"><ion-icon name="location-outline"></ion-icon></div>
+    <div class="venue-info">
+      <h3>{{ venue.name }}</h3>
+      <p>{{ venue.city }}</p>
+      <p class="address">{{ venue.address }}</p>
+    </div>
   </div>
 
-  <ion-list *ngIf="!loading">
-    <ion-item *ngFor="let venue of venues">
-      <ion-label>
-        <h2>{{ venue.name }}</h2>
-        <p>{{ venue.city }}</p>
-        <p>{{ venue.address }}</p>
-      </ion-label>
-    </ion-item>
-  </ion-list>
-
-  <p *ngIf="!loading && venues.length === 0" class="ion-text-center">
-    No venues yet. Tap + to add one.
-  </p>
+  <p *ngIf="!loading && venues.length === 0" class="empty-state">No venues yet. Tap + to add one.</p>
+  
 </ion-content>
+<app-tab-bar [tabs]="tabs"></app-tab-bar>

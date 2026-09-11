@@ -4,31 +4,22 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="ion-padding">
-  <div *ngIf="loading" class="ion-text-center ion-padding">
-    <ion-spinner></ion-spinner>
+<ion-content class="ion-padding has-tab-bar">
+  <div *ngIf="loading" class="ion-text-center ion-padding"><ion-spinner></ion-spinner></div>
+
+  <p *ngIf="errorMessage" class="error-text">{{ errorMessage }}</p>
+
+  <div class="approval-card" *ngFor="let event of events">
+    <div class="approval-info">
+      <h3>{{ event.name }}</h3>
+      <p>By {{ event.organizer?.name }} · {{ event.category?.name }}</p>
+      <p>{{ event.start_date }} - {{ event.end_date }}</p>
+    </div>
+    <ion-button size="small" [disabled]="approvingId === event.id" (click)="onApprove(event)">
+      {{ approvingId === event.id ? 'Approving...' : 'Approve' }}
+    </ion-button>
   </div>
 
-  <p *ngIf="errorMessage" style="color: red;">{{ errorMessage }}</p>
-
-  <ion-list *ngIf="!loading && events.length > 0">
-    <ion-item *ngFor="let event of events">
-      <ion-label>
-        <h2>{{ event.name }}</h2>
-        <p>By {{ event.organizer?.name }} · {{ event.category?.name }}</p>
-        <p>{{ event.start_date }} - {{ event.end_date }}</p>
-      </ion-label>
-      <ion-button
-        slot="end"
-        [disabled]="approvingId === event.id"
-        (click)="onApprove(event)"
-      >
-        {{ approvingId === event.id ? 'Approving...' : 'Approve' }}
-      </ion-button>
-    </ion-item>
-  </ion-list>
-
-  <p *ngIf="!loading && events.length === 0" class="ion-text-center">
-    No events waiting for approval.
-  </p>
+  <p *ngIf="!loading && events.length === 0" class="empty-state">No events waiting for approval.</p>
 </ion-content>
+<app-tab-bar [tabs]="tabs"></app-tab-bar>

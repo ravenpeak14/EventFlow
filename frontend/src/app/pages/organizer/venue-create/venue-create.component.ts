@@ -15,6 +15,9 @@ import {
   IonButton,
 } from '@ionic/angular/standalone';
 import { VenueService } from '../../../services/venue';
+import { TabBarComponent, TabBarItem } from '../../../shared/tab-bar/tab-bar.component';
+import { organizerTabs } from '../../../shared/tab-configs';
+
 
 @Component({
   selector: 'app-venue-create',
@@ -34,6 +37,7 @@ import { VenueService } from '../../../services/venue';
     IonLabel,
     IonInput,
     IonButton,
+    TabBarComponent,
   ],
 })
 export class VenueCreateComponent {
@@ -46,12 +50,13 @@ export class VenueCreateComponent {
 
   errorMessage = '';
   submitting = false;
+  tabs: TabBarItem[] = organizerTabs;
 
   constructor(
     private fb: FormBuilder,
     private venueService: VenueService,
     private router: Router
-  ) {}
+  ) { }
 
   onSubmit() {
     if (this.venueForm.invalid) {

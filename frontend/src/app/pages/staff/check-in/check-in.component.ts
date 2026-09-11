@@ -16,6 +16,11 @@ import {
 } from '@ionic/angular/standalone';
 import { EventService, EventItem } from '../../../services/event';
 import { CheckInService } from '../../../services/check-in';
+import { IonIcon } from '@ionic/angular/standalone';
+import { addIcons } from 'ionicons';
+import { checkmarkCircle, closeCircle } from 'ionicons/icons';
+import { TabBarComponent, TabBarItem } from '../../../shared/tab-bar/tab-bar.component';
+import { staffTabs } from '../../../shared/tab-configs';
 
 interface CheckInLogEntry {
   ticketCode: string;
@@ -44,6 +49,8 @@ interface CheckInLogEntry {
     IonInput,
     IonButton,
     IonList,
+    IonIcon,
+    TabBarComponent,
   ],
 })
 export class CheckInComponent implements OnInit {
@@ -52,20 +59,30 @@ export class CheckInComponent implements OnInit {
   ticketCode = '';
   submitting = false;
   log: CheckInLogEntry[] = [];
+  tabs: TabBarItem[] = staffTabs;
+
 
   constructor(
     private eventService: EventService,
     private checkInService: CheckInService
-  ) {}
+
+  ) { addIcons({ checkmarkCircle, closeCircle }); }
 
   ngOnInit() {
+    this.loadEvents();
+  }
+
+  ionViewWillEnter() {
+    this.loadEvents();
+    this.log = []; // riwayat scan staff sebelumnya jangan ikut nyangkut
+  }
+
+  private loadEvents() {
     this.eventService.getPublicEvents().subscribe({
       next: (response) => {
         this.events = response.data;
       },
-      error: (err) => {
-        console.error('Failed to load events:', err);
-      },
+      error: (err) => console.error('Failed to load events:', err),
     });
   }
 

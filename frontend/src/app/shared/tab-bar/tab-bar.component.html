@@ -1,0 +1,6 @@
+<div class="app-tab-bar">
+  <a *ngFor="let tab of tabs" [routerLink]="tab.route" routerLinkActive="active" class="tab-item">
+    <ion-icon [name]="tab.icon"></ion-icon>
+    <span>{{ tab.label }}</span>
+  </a>
+</div>

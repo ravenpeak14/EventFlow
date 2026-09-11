@@ -1,16 +1,21 @@
 import { Routes } from '@angular/router';
 import { authGuard } from './guards/auth-guard';
+import { rootGuard } from './guards/root-guard';
+import { guestGuard } from './guards/guest-guard';
 
 export const routes: Routes = [
   {
     path: 'home',
     loadComponent: () => import('./home/home.page').then((m) => m.HomePage),
   },
+
+
   {
     path: 'login',
-    loadComponent: () =>
-      import('./pages/login/login.component').then((m) => m.LoginComponent),
+    loadComponent: () => import('./pages/login/login.component').then((m) => m.LoginComponent),
+    canActivate: [guestGuard],
   },
+
   {
     path: 'organizer/events',
     loadComponent: () =>
@@ -37,7 +42,8 @@ export const routes: Routes = [
   },
   {
     path: '',
-    redirectTo: 'home',
+    loadComponent: () => import('./home/home.page').then((m) => m.HomePage),
+    canActivate: [rootGuard],
     pathMatch: 'full',
   },
   {
@@ -121,6 +127,19 @@ export const routes: Routes = [
       import('./pages/staff/check-in/check-in.component').then(
         (m) => m.CheckInComponent
       ),
+    canActivate: [authGuard],
+  },
+
+
+  {
+    path: 'register',
+    loadComponent: () => import('./pages/register/register.component').then((m) => m.RegisterComponent),
+    canActivate: [guestGuard],
+  },
+
+  {
+    path: 'account',
+    loadComponent: () => import('./pages/account/account.component').then((m) => m.AccountComponent),
     canActivate: [authGuard],
   },
 ];

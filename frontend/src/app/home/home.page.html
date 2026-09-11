@@ -1,31 +1,57 @@
-<ion-header [translucent]="true">
+<ion-header>
   <ion-toolbar>
     <ion-title>EventFlow</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">EventFlow</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content [fullscreen]="true" class="has-tab-bar">
+  <div class="hero">
+    <h1>Find your next <span>experience</span></h1>
+    <ion-searchbar
+      [(ngModel)]="searchTerm"
+      placeholder="Search events..."
+      showClearButton="focus"
+    ></ion-searchbar>
+  </div>
+
+  <div class="category-scroll">
+    <ion-chip
+      *ngFor="let category of categories"
+      [class.active]="selectedCategorySlug === category.slug"
+      (click)="toggleCategory(category.slug)"
+    >
+      <ion-icon [name]="categoryIcon(category.slug)"></ion-icon>
+      <ion-label>{{ category.name }}</ion-label>
+    </ion-chip>
+  </div>
 
   <div *ngIf="loading" class="ion-text-center ion-padding">
     <ion-spinner></ion-spinner>
   </div>
 
-  <ion-list *ngIf="!loading && events.length > 0">
-    <ion-item *ngFor="let event of events" [routerLink]="['/events', event.id]" button>
-      <ion-label>
+  <div class="event-list" *ngIf="!loading">
+    <a class="event-card" *ngFor="let event of filteredEvents" [routerLink]="['/events', event.id]">
+      <div class="event-banner" [style.background]="!event.banner ? categoryGradient(event.category?.slug) : null">
+        <img *ngIf="event.banner" [src]="event.banner" alt="" />
+        <ion-icon *ngIf="!event.banner" [name]="categoryIcon(event.category?.slug)"></ion-icon>
+        <span class="category-tag">{{ event.category?.name }}</span>
+      </div>
+      <div class="event-info">
+        <p class="event-date">
+          <ion-icon name="calendar-outline"></ion-icon>
+          {{ formatDate(event.start_date) }}
+        </p>
         <h2>{{ event.name }}</h2>
-        <p>{{ event.category?.name }} · {{ event.start_date }}</p>
-        <p *ngIf="event.venue">{{ event.venue.name }}, {{ event.venue.city }}</p>
-      </ion-label>
-    </ion-item>
-  </ion-list>
+        <p class="event-location" *ngIf="event.venue">
+          <ion-icon name="location-outline"></ion-icon>
+          {{ event.venue.name }}, {{ event.venue.city }}
+        </p>
+      </div>
+    </a>
 
-  <p *ngIf="!loading && events.length === 0" class="ion-text-center ion-padding">
-    No events available right now.
-  </p>
+    <p *ngIf="filteredEvents.length === 0" class="ion-text-center empty-state">
+      No events found.
+    </p>
+  </div>
 </ion-content>
+<app-tab-bar [tabs]="tabs"></app-tab-bar>

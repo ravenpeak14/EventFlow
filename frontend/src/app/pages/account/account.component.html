@@ -1,0 +1,21 @@
+<ion-header>
+  <ion-toolbar><ion-title>Account</ion-title></ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <div *ngIf="loading" class="ion-text-center ion-padding"><ion-spinner></ion-spinner></div>
+
+  <div *ngIf="!loading" class="profile-card">
+    <ion-icon name="person-circle-outline" class="avatar"></ion-icon>
+    <h2>{{ user?.name }}</h2>
+    <p>{{ user?.email }}</p>
+    <span class="role-pill">{{ role }}</span>
+  </div>
+
+  <ion-button expand="block" fill="outline" color="danger" class="logout-btn" (click)="logout()">
+    <ion-icon name="log-out-outline" slot="start"></ion-icon>
+    Log Out
+  </ion-button>
+</ion-content>
+
+<app-tab-bar [tabs]="tabs"></app-tab-bar>

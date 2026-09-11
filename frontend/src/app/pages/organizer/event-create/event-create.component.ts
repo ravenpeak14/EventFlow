@@ -22,6 +22,7 @@ import {
   EventCategoryService,
   EventCategoryItem,
 } from '../../../services/event-category';
+import { VenueService, VenueItem } from '../../../services/venue';
 
 @Component({
   selector: 'app-event-create',
@@ -48,11 +49,13 @@ import {
 })
 export class EventCreateComponent implements OnInit {
   categories: EventCategoryItem[] = [];
+  venues: VenueItem[] = [];
   errorMessage = '';
   submitting = false;
 
   eventForm = this.fb.group({
     event_category_id: [null, Validators.required],
+    venue_id: [null as number | null],
     name: ['', Validators.required],
     description: ['', Validators.required],
     start_date: ['', Validators.required],
@@ -66,6 +69,7 @@ export class EventCreateComponent implements OnInit {
     private fb: FormBuilder,
     private eventService: EventService,
     private categoryService: EventCategoryService,
+    private venueService: VenueService,
     private router: Router
   ) {}
 
@@ -76,6 +80,15 @@ export class EventCreateComponent implements OnInit {
       },
       error: (err) => {
         console.error('Failed to load categories:', err);
+      },
+    });
+
+    this.venueService.getAll().subscribe({
+      next: (response) => {
+        this.venues = response.data;
+      },
+      error: (err) => {
+        console.error('Failed to load venues:', err);
       },
     });
   }
@@ -94,6 +107,7 @@ export class EventCreateComponent implements OnInit {
     this.eventService
       .createEvent({
         event_category_id: Number(raw.event_category_id),
+        venue_id: raw.venue_id ?? undefined,
         name: raw.name!,
         description: raw.description!,
         start_date: raw.start_date!,

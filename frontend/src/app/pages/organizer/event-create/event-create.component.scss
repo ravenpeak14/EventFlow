@@ -1,0 +1,14 @@
+.two-col {
+    display: flex;
+    gap: 12px;
+
+    .field-box {
+        flex: 1;
+    }
+}
+
+.error-text {
+    color: var(--ion-color-danger);
+    text-align: center;
+    font-size: 0.85rem;
+}

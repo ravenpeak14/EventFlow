@@ -1,62 +1,56 @@
 <ion-header>
   <ion-toolbar>
-    <ion-buttons slot="start">
-      <ion-back-button defaultHref="/organizer/events"></ion-back-button>
-    </ion-buttons>
+    <ion-buttons slot="start"><ion-back-button defaultHref="/organizer/events"></ion-back-button></ion-buttons>
     <ion-title>Create Event</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content class="ion-padding">
   <form [formGroup]="eventForm" (ngSubmit)="onSubmit()">
-    <ion-item>
-      <ion-label position="floating">Category</ion-label>
-      <ion-select formControlName="event_category_id" interface="popover">
-        <ion-select-option *ngFor="let category of categories" [value]="category.id">
-          {{ category.name }}
-        </ion-select-option>
-      </ion-select>
-    </ion-item>
+    <ion-select label="Category" labelPlacement="stacked" formControlName="event_category_id" interface="popover">
+      <ion-select-option *ngFor="let category of categories" [value]="category.id">{{ category.name
+        }}</ion-select-option>
+    </ion-select>
 
-    <ion-item>
-      <ion-label position="floating">Event Name</ion-label>
-      <ion-input formControlName="name"></ion-input>
-    </ion-item>
+    <ion-select label="Venue (optional)" labelPlacement="stacked" formControlName="venue_id" interface="popover">
+      <ion-select-option [value]="null">Not set yet</ion-select-option>
+      <ion-select-option *ngFor="let venue of venues" [value]="venue.id">{{ venue.name }}, {{ venue.city
+        }}</ion-select-option>
+    </ion-select>
 
-    <ion-item>
-      <ion-label position="floating">Description</ion-label>
-      <ion-textarea formControlName="description" rows="4"></ion-textarea>
-    </ion-item>
+    <div class="field-box">
+      <ion-input label="Event Name" labelPlacement="stacked" formControlName="name"
+        placeholder="e.g. Tech Conference 2026"></ion-input>
+    </div>
 
-    <ion-item>
-      <ion-label position="floating">Start Date</ion-label>
-      <ion-input type="date" formControlName="start_date"></ion-input>
-    </ion-item>
+    <div class="field-box">
+      <ion-textarea label="Description" labelPlacement="stacked" formControlName="description" [autoGrow]="true"
+        rows="2"></ion-textarea>
+    </div>
 
-    <ion-item>
-      <ion-label position="floating">End Date</ion-label>
-      <ion-input type="date" formControlName="end_date"></ion-input>
-    </ion-item>
+    <div class="two-col">
+      <div class="field-box"><ion-input label="Start Date" labelPlacement="stacked" type="date"
+          formControlName="start_date"></ion-input></div>
+      <div class="field-box"><ion-input label="End Date" labelPlacement="stacked" type="date"
+          formControlName="end_date"></ion-input></div>
+    </div>
 
-    <ion-item>
-      <ion-label position="floating">Start Time</ion-label>
-      <ion-input type="time" formControlName="start_time"></ion-input>
-    </ion-item>
+    <div class="two-col">
+      <div class="field-box"><ion-input label="Start Time" labelPlacement="stacked" type="time"
+          formControlName="start_time"></ion-input></div>
+      <div class="field-box"><ion-input label="End Time" labelPlacement="stacked" type="time"
+          formControlName="end_time"></ion-input></div>
+    </div>
 
-    <ion-item>
-      <ion-label position="floating">End Time</ion-label>
-      <ion-input type="time" formControlName="end_time"></ion-input>
-    </ion-item>
-
-    <ion-item>
-      <ion-label position="floating">Capacity (optional)</ion-label>
-      <ion-input type="number" formControlName="capacity"></ion-input>
-    </ion-item>
+    <div class="field-box">
+      <ion-input label="Capacity (optional)" labelPlacement="stacked" type="number"
+        formControlName="capacity"></ion-input>
+    </div>
 
     <ion-button expand="block" type="submit" class="ion-margin-top" [disabled]="submitting">
       {{ submitting ? 'Creating...' : 'Create Event' }}
     </ion-button>
 
-    <p *ngIf="errorMessage" style="color: red;">{{ errorMessage }}</p>
+    <p *ngIf="errorMessage" class="error-text">{{ errorMessage }}</p>
   </form>
 </ion-content>

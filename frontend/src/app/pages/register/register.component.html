@@ -4,10 +4,19 @@
       <h1>Event<span>Flow</span></h1>
     </div>
 
-    <h2 class="auth-title">Welcome back</h2>
-    <p class="auth-subtitle">Log in to continue booking events</p>
+    <h2 class="auth-title">Create your account</h2>
+    <p class="auth-subtitle">Join EventFlow to start booking events</p>
 
-    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+      <ion-input
+        label="Full Name"
+        labelPlacement="stacked"
+        fill="outline"
+        formControlName="name"
+        placeholder="John Doe"
+        class="auth-input"
+      ></ion-input>
+
       <ion-input
         label="Email"
         labelPlacement="stacked"
@@ -24,7 +33,7 @@
         fill="outline"
         [type]="showPassword ? 'text' : 'password'"
         formControlName="password"
-        placeholder="••••••••"
+        placeholder="Min. 8 characters"
         class="auth-input"
       >
         <ion-icon
@@ -34,16 +43,26 @@
         ></ion-icon>
       </ion-input>
 
+      <ion-input
+        label="Confirm Password"
+        labelPlacement="stacked"
+        fill="outline"
+        [type]="showPassword ? 'text' : 'password'"
+        formControlName="password_confirmation"
+        placeholder="Re-enter password"
+        class="auth-input"
+      ></ion-input>
+
       <ion-button expand="block" type="submit" [disabled]="submitting" class="auth-submit">
-        {{ submitting ? 'Logging in...' : 'Log In' }}
+        {{ submitting ? 'Creating account...' : 'Create Account' }}
       </ion-button>
 
       <p *ngIf="errorMessage" class="auth-error">{{ errorMessage }}</p>
     </form>
 
     <div class="auth-switch">
-      <span>New to EventFlow?</span>
-      <a routerLink="/register">Create an account</a>
+      <span>Already have an account?</span>
+      <a routerLink="/login">Log in</a>
     </div>
   </div>
 </ion-content>

@@ -30,12 +30,7 @@
 
     <h2 class="ion-text-end">Total: Rp {{ order.total_amount | number }}</h2>
 
-    <ion-button
-      *ngIf="order.status === 'pending'"
-      expand="block"
-      [disabled]="submitting"
-      (click)="payNow()"
-    >
+    <ion-button *ngIf="order.status === 'pending'" expand="block" [disabled]="submitting" (click)="payNow()">
       {{ submitting ? 'Processing...' : 'Pay Now (Simulation)' }}
     </ion-button>
 

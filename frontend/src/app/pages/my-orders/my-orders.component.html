@@ -4,22 +4,19 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="ion-padding">
-  <div *ngIf="loading" class="ion-text-center ion-padding">
-    <ion-spinner></ion-spinner>
-  </div>
+<ion-content class="ion-padding has-tab-bar">
+  <div *ngIf="loading" class="ion-text-center ion-padding"><ion-spinner></ion-spinner></div>
 
-  <ion-list *ngIf="!loading && orders.length > 0">
-    <ion-item *ngFor="let order of orders" [routerLink]="['/orders', order.id]" button>
-      <ion-label>
-        <h2>{{ order.order_number }}</h2>
-        <p>Rp {{ order.total_amount | number }} · {{ order.items.length }} item(s)</p>
-      </ion-label>
-      <ion-badge [color]="statusColor(order.status)">{{ order.status }}</ion-badge>
-    </ion-item>
-  </ion-list>
+  <a class="order-card" *ngFor="let order of orders" [routerLink]="['/orders', order.id]">
+    <div class="order-icon"><ion-icon name="receipt-outline"></ion-icon></div>
+    <div class="order-info">
+      <h3>{{ order.order_number }}</h3>
+      <p>{{ order.items.length }} item(s) · Rp {{ order.total_amount | number }}</p>
+    </div>
+    <ion-badge [color]="statusColor(order.status)">{{ order.status }}</ion-badge>
+    <ion-icon name="chevron-forward-outline" class="chevron"></ion-icon>
+  </a>
 
-  <p *ngIf="!loading && orders.length === 0" class="ion-text-center">
-    You haven't made any orders yet.
-  </p>
+  <p *ngIf="!loading && orders.length === 0" class="empty-state">You haven't made any orders yet.</p>
 </ion-content>
+<app-tab-bar [tabs]="tabs"></app-tab-bar>

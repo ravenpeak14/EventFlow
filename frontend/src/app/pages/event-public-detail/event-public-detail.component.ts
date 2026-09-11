@@ -5,19 +5,27 @@ import { ActivatedRoute, Router } from '@angular/router';
 import {
   IonHeader,
   IonToolbar,
-  IonTitle,
   IonButtons,
   IonBackButton,
   IonContent,
-  IonList,
-  IonItem,
-  IonLabel,
+  IonFooter,
   IonButton,
+  IonIcon,
   IonSpinner,
   IonBadge,
 } from '@ionic/angular/standalone';
+import { addIcons } from 'ionicons';
+import {
+  calendarOutline,
+  locationOutline,
+  timeOutline,
+  removeOutline,
+  addOutline,
+  checkmarkCircle,
+} from 'ionicons/icons';
 import { EventService, EventItem } from '../../services/event';
 import { OrderService, OrderResult } from '../../services/order';
+import { getCategoryIcon, getCategoryGradient } from '../../shared/category-visuals';
 import { Preferences } from '@capacitor/preferences';
 
 @Component({
@@ -30,14 +38,12 @@ import { Preferences } from '@capacitor/preferences';
     FormsModule,
     IonHeader,
     IonToolbar,
-    IonTitle,
     IonButtons,
     IonBackButton,
     IonContent,
-    IonList,
-    IonItem,
-    IonLabel,
+    IonFooter,
     IonButton,
+    IonIcon,
     IonSpinner,
     IonBadge,
   ],
@@ -49,14 +55,22 @@ export class EventPublicDetailComponent implements OnInit {
   submitting = false;
   errorMessage = '';
   order: OrderResult | null = null;
-  isLoggedIn = true;
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private eventService: EventService,
     private orderService: OrderService
-  ) {}
+  ) {
+    addIcons({
+      calendarOutline,
+      locationOutline,
+      timeOutline,
+      removeOutline,
+      addOutline,
+      checkmarkCircle,
+    });
+  }
 
   ngOnInit() {
     const id = Number(this.route.snapshot.paramMap.get('id'));
@@ -75,6 +89,23 @@ export class EventPublicDetailComponent implements OnInit {
         console.error('Failed to load event:', err);
         this.loading = false;
       },
+    });
+  }
+
+  categoryIcon(slug?: string): string {
+    return getCategoryIcon(slug);
+  }
+
+  categoryGradient(slug?: string): string {
+    return getCategoryGradient(slug);
+  }
+
+  formatDate(dateStr: string): string {
+    return new Date(dateStr).toLocaleDateString('id-ID', {
+      weekday: 'long',
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric',
     });
   }
 

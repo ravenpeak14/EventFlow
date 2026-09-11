@@ -34,4 +34,133 @@
 
 /* @import "@ionic/angular/css/palettes/dark.always.css"; */
 /* @import "@ionic/angular/css/palettes/dark.class.css"; */
-@import '@ionic/angular/css/palettes/dark.system.css';
+/* ---- Typography ---- */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+ion-title,
+ion-card-title {
+    font-family: var(--ef-font-heading);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+}
+
+body,
+ion-content,
+ion-label,
+ion-item,
+p {
+    font-family: var(--ef-font-body);
+}
+
+/* ---- Flatter, rounder components (Eventbrite-ish) ---- */
+ion-card {
+    border-radius: var(--ef-radius);
+    box-shadow: var(--ef-shadow);
+    border: 1px solid rgba(26, 26, 46, 0.06);
+}
+
+ion-button {
+    --border-radius: var(--ef-radius-sm);
+    --box-shadow: none;
+    font-weight: 600;
+    text-transform: none;
+    letter-spacing: 0;
+}
+
+ion-badge {
+    border-radius: 999px;
+    padding: 4px 10px;
+    font-weight: 600;
+    font-size: 0.75rem;
+}
+
+ion-toolbar {
+    --border-width: 0;
+    --box-shadow: none;
+}
+
+/* ---- Back button: bulat, ikon saja ---- */
+ion-back-button {
+    --color: var(--ion-color-dark);
+    --icon-font-size: 1.4rem;
+    --background: var(--ion-color-light);
+    --background-hover: var(--ion-color-light-shade);
+    --border-radius: 50%;
+    --padding-start: 8px;
+    --padding-end: 8px;
+    height: 40px;
+    width: 40px;
+    margin-inline-start: 4px;
+}
+
+ion-back-button::part(text) {
+    display: none;
+}
+
+/* ---- Fix: body background & chip text visibility ---- */
+html,
+body {
+    background: #ffffff;
+}
+
+ion-chip {
+    color: var(--ion-color-dark);
+
+    ion-icon {
+        color: var(--ion-color-dark);
+    }
+
+    &.active,
+    &.active ion-icon {
+        color: #ffffff;
+    }
+}
+
+/* ---- Consistent outline inputs across all forms ---- */
+/* ---- ion-select: custom properties ini terbukti jalan normal ---- */
+ion-select {
+    --background: var(--ion-color-light);
+    --border-radius: 12px;
+    --border-width: 1.5px;
+    --border-color: rgba(26, 26, 46, 0.15);
+    --padding-start: 14px;
+    --padding-end: 14px;
+    --padding-top: 12px;
+    --padding-bottom: 12px;
+    margin-bottom: 18px;
+    display: block;
+}
+
+ion-select::part(icon) {
+    color: var(--ion-color-medium);
+}
+
+/* ---- Kotak field custom (menghindari bug Ionic pada ion-input fill) ---- */
+.field-box {
+    background: var(--ion-color-light);
+    border: 1.5px solid rgba(26, 26, 46, 0.15);
+    border-radius: 12px;
+    padding: 0 14px;
+    margin-bottom: 18px;
+}
+
+.field-box ion-input,
+.field-box ion-textarea {
+    --background: transparent;
+    --border-width: 0;
+    --padding-start: 0;
+    --padding-end: 0;
+    --highlight-color-focused: var(--ion-color-primary);
+}
+
+ion-select::part(icon) {
+    color: var(--ion-color-medium);
+}
+/* ---- Beri ruang di bawah supaya konten tidak tertutup tab bar ---- */
+ion-content.has-tab-bar {
+  --padding-bottom: 70px;
+}

@@ -1,29 +1,24 @@
 <ion-header>
   <ion-toolbar>
     <ion-title>My Events</ion-title>
+    <ion-buttons slot="end">
+      <ion-button routerLink="/organizer/events/create"><ion-icon name="add-outline"></ion-icon></ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="ion-padding">
-  <div *ngIf="loading" class="ion-text-center ion-padding">
-    <ion-spinner></ion-spinner>
-  </div>
+<ion-content class="ion-padding has-tab-bar">
+  <div *ngIf="loading" class="ion-text-center ion-padding"><ion-spinner></ion-spinner></div>
 
-  <p *ngIf="errorMessage" style="color: red;">{{ errorMessage }}</p>
+  <a class="event-row" *ngFor="let event of events" [routerLink]="['/organizer/events', event.id]">
+    <div class="event-row-info">
+      <span class="status-pill" [attr.data-status]="event.status">{{ event.status }}</span>
+      <h3>{{ event.name }}</h3>
+      <p><ion-icon name="calendar-outline"></ion-icon> {{ event.start_date }} · {{ event.category?.name }}</p>
+    </div>
+    <ion-icon name="chevron-forward-outline" class="chevron"></ion-icon>
+  </a>
 
-  <ion-list *ngIf="!loading && events.length > 0">
-    <ion-item *ngFor="let event of events" [routerLink]="['/organizer/events', event.id]" button>
-      <ion-label>
-        <h2>{{ event.name }}</h2>
-        <p>{{ event.start_date }} · {{ event.category?.name }}</p>
-      </ion-label>
-      <ion-badge [color]="statusColor(event.status)">
-        {{ event.status }}
-      </ion-badge>
-    </ion-item>
-  </ion-list>
-
-  <p *ngIf="!loading && events.length === 0" class="ion-text-center">
-    No events yet.
-  </p>
+  <p *ngIf="!loading && events.length === 0" class="empty-state">No events yet. Tap + to create one.</p>
 </ion-content>
+<app-tab-bar [tabs]="tabs"></app-tab-bar>

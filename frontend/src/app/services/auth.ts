@@ -20,7 +20,7 @@ const ROLE_KEY = 'auth_role';
 export class AuthService {
   private baseUrl = environment.apiUrl;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   register(data: {
     name: string;
@@ -53,5 +53,13 @@ export class AuthService {
   async clearSession(): Promise<void> {
     await Preferences.remove({ key: TOKEN_KEY });
     await Preferences.remove({ key: ROLE_KEY });
+  }
+
+  getMe(): Observable<{ user: { id: number; name: string; email: string }; role: string }> {
+    return this.http.get<{ user: any; role: string }>(`${this.baseUrl}/me`);
+  }
+
+  logout(): Observable<{ message: string }> {
+    return this.http.post<{ message: string }>(`${this.baseUrl}/logout`, {});
   }
 }

@@ -12,6 +12,8 @@ import {
   IonSpinner,
 } from '@ionic/angular/standalone';
 import { EventService, EventItem } from '../../../services/event';
+import { TabBarComponent, TabBarItem } from '../../../shared/tab-bar/tab-bar.component';
+import { adminTabs } from '../../../shared/tab-configs';
 
 @Component({
   selector: 'app-pending-approvals',
@@ -29,6 +31,7 @@ import { EventService, EventItem } from '../../../services/event';
     IonLabel,
     IonButton,
     IonSpinner,
+    TabBarComponent,
   ],
 })
 export class PendingApprovalsComponent implements OnInit {
@@ -36,10 +39,15 @@ export class PendingApprovalsComponent implements OnInit {
   loading = true;
   approvingId: number | null = null;
   errorMessage = '';
+  tabs: TabBarItem[] = adminTabs;
 
-  constructor(private eventService: EventService) {}
+  constructor(private eventService: EventService) { }
 
   ngOnInit() {
+    this.loadPending();
+  }
+
+  ionViewWillEnter() {
     this.loadPending();
   }
 

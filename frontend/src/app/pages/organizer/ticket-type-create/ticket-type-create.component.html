@@ -1,38 +1,32 @@
 <ion-header>
   <ion-toolbar>
-    <ion-buttons slot="start">
-      <ion-back-button [defaultHref]="'/organizer/events/' + eventId"></ion-back-button>
-    </ion-buttons>
+    <ion-buttons slot="start"><ion-back-button
+        [defaultHref]="'/organizer/events/' + eventId"></ion-back-button></ion-buttons>
     <ion-title>Add Ticket Type</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content class="ion-padding">
   <form [formGroup]="ticketForm" (ngSubmit)="onSubmit()">
-    <ion-item>
-      <ion-label position="floating">Ticket Name</ion-label>
-      <ion-input formControlName="name" placeholder="e.g. Early Bird, Regular, VIP"></ion-input>
-    </ion-item>
-
-    <ion-item>
-      <ion-label position="floating">Description (optional)</ion-label>
-      <ion-textarea formControlName="description" rows="3"></ion-textarea>
-    </ion-item>
-
-    <ion-item>
-      <ion-label position="floating">Price (Rp)</ion-label>
-      <ion-input type="number" formControlName="price"></ion-input>
-    </ion-item>
-
-    <ion-item>
-      <ion-label position="floating">Quota</ion-label>
-      <ion-input type="number" formControlName="quota"></ion-input>
-    </ion-item>
+    <div class="field-box">
+      <ion-input label="Ticket Name" labelPlacement="stacked" formControlName="name"
+        placeholder="e.g. Early Bird, VIP"></ion-input>
+    </div>
+    <div class="field-box">
+      <ion-textarea label="Description (optional)" labelPlacement="stacked" formControlName="description"
+        [autoGrow]="true" rows="2"></ion-textarea>
+    </div>
+    <div class="field-box">
+      <ion-input label="Price (Rp)" labelPlacement="stacked" type="number" formControlName="price"></ion-input>
+    </div>
+    <div class="field-box">
+      <ion-input label="Quota" labelPlacement="stacked" type="number" formControlName="quota"></ion-input>
+    </div>
 
     <ion-button expand="block" type="submit" class="ion-margin-top" [disabled]="submitting">
       {{ submitting ? 'Saving...' : 'Add Ticket Type' }}
     </ion-button>
 
-    <p *ngIf="errorMessage" style="color: red;">{{ errorMessage }}</p>
+    <p *ngIf="errorMessage" class="error-text">{{ errorMessage }}</p>
   </form>
 </ion-content>

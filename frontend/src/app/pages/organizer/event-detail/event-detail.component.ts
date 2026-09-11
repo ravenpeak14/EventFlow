@@ -17,9 +17,9 @@ import {
   IonLabel,
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
-import { addOutline, trashOutline } from 'ionicons/icons';
 import { EventService, EventItem } from '../../../services/event';
 import { TicketTypeService, TicketTypeItem } from '../../../services/ticket-type';
+import { pricetagOutline, calendarOutline, timeOutline, locationOutline, peopleOutline, addOutline, trashOutline } from 'ionicons/icons';
 
 @Component({
   selector: 'app-event-detail',
@@ -42,6 +42,7 @@ import { TicketTypeService, TicketTypeItem } from '../../../services/ticket-type
     IonList,
     IonItem,
     IonLabel,
+    
   ],
 })
 export class EventDetailComponent implements OnInit {
@@ -58,6 +59,7 @@ export class EventDetailComponent implements OnInit {
     private ticketTypeService: TicketTypeService
   ) {
     addIcons({ addOutline, trashOutline });
+    addIcons({ pricetagOutline, calendarOutline, timeOutline, locationOutline, peopleOutline, addOutline, trashOutline });
   }
 
   ngOnInit() {
@@ -116,6 +118,10 @@ export class EventDetailComponent implements OnInit {
       cancelled: 'danger',
     };
     return colors[status] ?? 'medium';
+  }
+
+  formatDate(dateStr: string): string {
+    return new Date(dateStr).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' });
   }
 
   onSubmit() {

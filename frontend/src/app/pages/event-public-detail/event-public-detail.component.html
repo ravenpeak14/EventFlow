@@ -1,97 +1,112 @@
-<ion-header>
+<ion-header class="transparent-header">
   <ion-toolbar>
     <ion-buttons slot="start">
       <ion-back-button defaultHref="/home"></ion-back-button>
     </ion-buttons>
-    <ion-title>Event Detail</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="ion-padding">
+<ion-content [fullscreen]="true">
   <div *ngIf="loading" class="ion-text-center ion-padding">
     <ion-spinner></ion-spinner>
   </div>
 
   <div *ngIf="!loading && event">
-    <h1>{{ event.name }}</h1>
-    <p>{{ event.category?.name }} · {{ event.start_date }} {{ event.start_time }}</p>
-    <p *ngIf="event.venue">{{ event.venue.name }}, {{ event.venue.city }}</p>
-    <p>{{ event.description }}</p>
-
-    <!-- Order confirmation state -->
-    <div *ngIf="order">
-      <h2>Order {{ order.order_number }}</h2>
-      <ion-badge [color]="order.status === 'paid' ? 'success' : 'warning'">
-        {{ order.status }}
-      </ion-badge>
-
-      <ion-list>
-        <ion-item *ngFor="let item of order.items">
-          <ion-label>
-            <h3>{{ item.ticket_type.name }} × {{ item.quantity }}</h3>
-            <p>Rp {{ item.subtotal | number }}</p>
-          </ion-label>
-        </ion-item>
-      </ion-list>
-
-      <h3>Total: Rp {{ order.total_amount | number }}</h3>
-
-      <ion-button
-        *ngIf="order.status === 'pending'"
-        expand="block"
-        [disabled]="submitting"
-        (click)="payNow()"
-      >
-        {{ submitting ? 'Processing...' : 'Pay Now (Simulation)' }}
-      </ion-button>
-
-      <p *ngIf="order.status === 'paid'" class="ion-text-center" style="color: green;">
-        Payment successful! Your tickets are confirmed.
-      </p>
+    <div class="hero-banner" [style.background]="categoryGradient(event.category?.slug)">
+      <img *ngIf="event.banner" [src]="event.banner" alt="" />
+      <ion-icon *ngIf="!event.banner" [name]="categoryIcon(event.category?.slug)"></ion-icon>
     </div>
 
-    <!-- Ticket selection state -->
-    <div *ngIf="!order">
-      <h2 class="ion-margin-top">Select Tickets</h2>
+    <div class="detail-body">
+      <span class="category-pill">{{ event.category?.name }}</span>
+      <h1>{{ event.name }}</h1>
 
-      <ion-list *ngIf="event.ticket_types && event.ticket_types.length > 0">
-        <ion-item *ngFor="let ticket of event.ticket_types">
-          <ion-label>
-            <h3>{{ ticket.name }}</h3>
-            <p>Rp {{ ticket.price | number }} · {{ ticket.available_quota }} left</p>
-          </ion-label>
-          <ion-button
-            fill="clear"
-            slot="end"
-            [disabled]="quantities[ticket.id] === 0"
-            (click)="decrement(ticket.id)"
-          >
-            -
-          </ion-button>
-          <span>{{ quantities[ticket.id] }}</span>
-          <ion-button
-            fill="clear"
-            slot="end"
-            [disabled]="quantities[ticket.id] >= ticket.available_quota"
-            (click)="increment(ticket.id, ticket.available_quota)"
-          >
-            +
-          </ion-button>
-        </ion-item>
-      </ion-list>
-
-      <p *ngIf="!event.ticket_types || event.ticket_types.length === 0" class="ion-text-center">
-        No tickets available for this event.
-      </p>
-
-      <div *ngIf="totalTickets > 0" class="ion-margin-top">
-        <h3>Total: Rp {{ totalPrice | number }}</h3>
-        <ion-button expand="block" [disabled]="submitting" (click)="checkout()">
-          {{ submitting ? 'Processing...' : 'Checkout' }}
-        </ion-button>
+      <div class="meta-row">
+        <ion-icon name="calendar-outline"></ion-icon>
+        <span>{{ formatDate(event.start_date) }}</span>
+      </div>
+      <div class="meta-row">
+        <ion-icon name="time-outline"></ion-icon>
+        <span>{{ event.start_time }} - {{ event.end_time }}</span>
+      </div>
+      <div class="meta-row" *ngIf="event.venue">
+        <ion-icon name="location-outline"></ion-icon>
+        <span>{{ event.venue.name }}, {{ event.venue.city }}</span>
       </div>
 
-      <p *ngIf="errorMessage" style="color: red;">{{ errorMessage }}</p>
+      <div class="divider"></div>
+
+      <h2 class="section-title">About this event</h2>
+      <p class="description">{{ event.description }}</p>
+
+      <div class="divider"></div>
+
+      <!-- Order confirmation state -->
+      <div *ngIf="order">
+        <h2 class="section-title">Order {{ order.order_number }}</h2>
+
+        <div class="order-item-row" *ngFor="let item of order.items">
+          <span>{{ item.ticket_type.name }} × {{ item.quantity }}</span>
+          <span>Rp {{ item.subtotal | number }}</span>
+        </div>
+
+        <div *ngIf="order.status === 'paid'" class="success-banner">
+          <ion-icon name="checkmark-circle"></ion-icon>
+          <span>Payment confirmed. Your tickets are ready in "My Tickets".</span>
+        </div>
+
+        <p *ngIf="errorMessage" class="error-text">{{ errorMessage }}</p>
+      </div>
+
+      <!-- Ticket selection state -->
+      <div *ngIf="!order">
+        <h2 class="section-title">Select tickets</h2>
+
+        <div class="ticket-row" *ngFor="let ticket of event.ticket_types">
+          <div class="ticket-info">
+            <h3>{{ ticket.name }}</h3>
+            <p>Rp {{ ticket.price | number }} · {{ ticket.available_quota }} left</p>
+          </div>
+          <div class="stepper">
+            <button class="stepper-btn" [disabled]="quantities[ticket.id] === 0" (click)="decrement(ticket.id)">
+              <ion-icon name="remove-outline"></ion-icon>
+            </button>
+            <span>{{ quantities[ticket.id] }}</span>
+            <button class="stepper-btn" [disabled]="quantities[ticket.id] >= ticket.available_quota"
+              (click)="increment(ticket.id, ticket.available_quota)">
+              <ion-icon name="add-outline"></ion-icon>
+            </button>
+          </div>
+        </div>
+
+        <p *ngIf="!event.ticket_types || event.ticket_types.length === 0" class="empty-note">
+          No tickets available for this event.
+        </p>
+
+        <p *ngIf="errorMessage" class="error-text">{{ errorMessage }}</p>
+      </div>
     </div>
   </div>
 </ion-content>
+
+<ion-footer *ngIf="!loading && event" class="checkout-bar">
+  <ng-container *ngIf="!order && totalTickets > 0">
+    <div class="checkout-summary">
+      <span class="ticket-count">{{ totalTickets }} ticket(s)</span>
+      <span class="total-amount">Rp {{ totalPrice | number }}</span>
+    </div>
+    <ion-button [disabled]="submitting" (click)="checkout()">
+      {{ submitting ? 'Processing...' : 'Checkout' }}
+    </ion-button>
+  </ng-container>
+
+  <ng-container *ngIf="order && order.status === 'pending'">
+    <div class="checkout-summary">
+      <span class="ticket-count">Total</span>
+      <span class="total-amount">Rp {{ order.total_amount | number }}</span>
+    </div>
+    <ion-button [disabled]="submitting" (click)="payNow()">
+      {{ submitting ? 'Processing...' : 'Pay Now (Simulation)' }}
+    </ion-button>
+  </ng-container>
+</ion-footer>
